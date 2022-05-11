@@ -44,3 +44,23 @@ resource "aws_vpc" "main" {
 ```
 Because we use for_each erraform will create one instance for each member of that set. The cidr_block will change with every run.
 
+
+3. The code can be changed the following way if needed
+
+
+```
+variable "vpc" {
+  type        = list(string)
+  description = "list of subnets"
+  default = [
+    "10.0.0.0/16",
+    "10.1.0.0/16",
+  ]
+}
+
+resource "aws_vpc" "main" {
+  for_each   = toset(var.vpc)
+  cidr_block = each.value
+}
+```
+here the variable is list and we need to parse it to set with ```toset``` thsi is terraform integrated
